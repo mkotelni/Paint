@@ -10,13 +10,10 @@ public class Main extends Application{
     public void start(Stage stage) throws Exception
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("paint.fxml"));
+        loader.setControllerFactory(param -> new PaintController(stage));
+
         Scene scene = new Scene(loader.load());
 
-        PaintController controller = loader.getController();
-
-        controller.setStage(stage);
-
-        //stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("paint.fxml")))); //redundant???
         stage.setScene(scene);
         stage.show();
     }
