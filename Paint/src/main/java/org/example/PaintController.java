@@ -2,68 +2,67 @@ package org.example;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.canvas.Canvas;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.stage.FileChooser;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-
-import javax.imageio.ImageIO;
-import java.io.File;
 
 public class PaintController {
     @FXML
+    BorderPane borderPane;
+    @FXML
     private Canvas canvas;
+    @FXML
+    private ColorPicker colorPicker;
+    @FXML
+    private TextField brushSize;
+    @FXML
+    private TextField imageWidth;
+    @FXML
+    private TextField imageHeight;
 
     private Stage stage;
 
-    private File loadedImage;
+    private Screen screen;
+    private FileMenu fileMenu;
+    private AlertWindow alertWindow;
 
-    public void setStage(Stage stage)
+    /*----CONSTRUCTORS----*/
+    public PaintController(Stage stage)
     {
         this.stage = stage;
     }
 
+    @FXML
+    private void initialize()
+    {
+        /*canvas.widthProperty().bind(borderPane.widthProperty());
+        canvas.heightProperty().bind(borderPane.heightProperty());*/
+
+        screen = new Screen(stage, canvas);
+        fileMenu = new FileMenu(stage, canvas);
+        alertWindow = new AlertWindow();
+
+        stage.setOnCloseRequest(windowEvent -> {
+            windowEvent.consume();
+            alertWindow.handleExit(fileMenu);
+        });
+    }
+
+    /*----BUTTON ACTIONS----*/
+    //BEGINNING OF FILEMENU BUTTONS
     public void onSave()
     {
-        //TURN INTO A FUNCTION
-        try
-        {
-            Image snapshot = canvas.snapshot(null, null);
-
-            ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", loadedImage);
-        }
-        catch (Exception e)
-        {
-            System.out.println("Failed to save image: " + e);
-        }
+        fileMenu.save();
     }
 
     public void onSaveAs()
     {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save as");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
-        File file = fileChooser.showSaveDialog(stage);
-
-        //TURN INTO A FUNCTION
-        if (file != null)
-        {
-            try
-            {
-                Image snapshot = canvas.snapshot(null, null);
-
-                ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", file);
-            }
-            catch (Exception e)
-            {
-                System.out.println("Failed to save image: " + e);
-            }
-        }
-
+        fileMenu.saveAs();
     }
 
+    //TODO: get rid of exit
     public void onExit()
     {
         Platform.exit();
@@ -71,22 +70,35 @@ public class PaintController {
 
     public void onLoadImage()
     {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select Image File");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
-        loadedImage = fileChooser.showOpenDialog(stage);
+        fileMenu.loadImage();
+    }
+    //END OF FILEMENU BUTTONS
 
-        if(loadedImage != null)
-        {
-            Image image = new Image(loadedImage.toURI().toString());
+    //START OF HELPMENU BUTTONS
+    public void onHelp()
+    {
+        alertWindow.showHelp();
+    }
 
-            canvas.setWidth(image.getWidth());
-            canvas.setHeight(image.getHeight());
+    public void onAbout()
+    {
+        alertWindow.showAbout();
+    }
+    //END OF HELPMENU BUTTONS
 
-            GraphicsContext gc = canvas.getGraphicsContext2D();
-            gc.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
-            gc.drawImage(image, 0, 0);
-        }
+    //RESIZE BUTTON
+    public void onResize()
+    {
+        double width = Double.parseDouble(imageWidth.getText());
+        double height = Double.parseDouble(imageHeight.getText());
 
+        screen.setImage(fileMenu.getImage());
+        screen.drawImage(width, height);
+    }
+
+    /*-----TEXTFIELD ACTIONS-----*/
+    public void onBrushSize()
+    {
+        screen.setBrushSize(Double.parseDouble(brushSize.getText()));
     }
 }
