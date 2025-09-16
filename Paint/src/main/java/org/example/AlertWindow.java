@@ -10,17 +10,25 @@ public class AlertWindow{
     {
         Alert aboutWindow = new Alert(Alert.AlertType.INFORMATION);
         aboutWindow.setTitle("About");
-        aboutWindow.setHeaderText("");
-        aboutWindow.setContentText("");
+        aboutWindow.setHeaderText("About this software:");
+        aboutWindow.setContentText("Pain(t) v1.0.1\n\n" +
+                                    "2025 Max Kotelnikov\n\n" +
+                                    "Github: https://github.com/mkotelni/Paint.git");
         aboutWindow.showAndWait();
     }
 
     public void showHelp()
     {
         Alert helpWindow = new Alert(Alert.AlertType.INFORMATION);
-        helpWindow.setTitle("How to use");
-        helpWindow.setHeaderText("");
-        helpWindow.setContentText("");
+        helpWindow.setTitle("Help");
+        helpWindow.setHeaderText("How to use:");
+        helpWindow.setContentText("File menu:\n" +
+                                    "Load and save images through the file menu\n\n" +
+                                    "Drawing:\n" +
+                                    "To draw, click and drag the mouse\n" +
+                                    "To change brush size, input desired size in the Brush Size text field and press enter\n" +
+                                    "To change color, click the color dropdown and choose a color\n" +
+                                    "To resize an image, input width and height to their respective text fields and click the resize button");
         helpWindow.showAndWait();
     }
 

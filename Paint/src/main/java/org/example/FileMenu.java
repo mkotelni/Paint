@@ -7,6 +7,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class FileMenu extends Screen{
@@ -38,13 +40,16 @@ public class FileMenu extends Screen{
     //writes whatever's on screen to a given file path
     private void writeImage(File file) //precondition: file != null
     {
+        Image snapshot = getCanvas().snapshot(null, null);
+        BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
         String format = chooseFormat(file);
+
+        if (format.equals("jpg") || format.equals("bmp")) // jpg/bmp has no alpha support, won't save
+            image = stripAlpha(snapshot);
 
         try
         {
-            Image snapshot = getCanvas().snapshot(null, null);
-
-            if (!ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), format, file)) //throws exception if it can't write in that format
+            if (!ImageIO.write(image, format, file)) //throws exception if it can't write in that format
                 throw new Exception("failed to locate suitable writer");
         }
         catch (Exception e)
@@ -65,6 +70,24 @@ public class FileMenu extends Screen{
         else
             return "png";
     }
+
+    //used if we need to convert to a file type that doesn't support alpha (transparency)
+    private BufferedImage stripAlpha(Image image)
+    {
+        BufferedImage snapshot = SwingFXUtils.fromFXImage(image, null);
+
+        BufferedImage strippedImage = new BufferedImage(snapshot.getWidth(),
+                                                        snapshot.getHeight(),
+                                                        BufferedImage.TYPE_INT_RGB);
+
+        Graphics2D g = strippedImage.createGraphics();
+        g.drawImage(strippedImage, 0, 0, Color.WHITE, null);
+        g.dispose();
+
+        return strippedImage;
+    }
+
+    /*-----BUTTON ACTIONS------*/
 
     //save whatever's on screen to current file path
     public void save() {

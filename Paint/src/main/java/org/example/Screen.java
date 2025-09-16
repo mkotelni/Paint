@@ -50,7 +50,7 @@ public class Screen {
 
     /*----HELPER FUNCTIONS----*/
     //draws an image to the canvas
-    public void drawImage()
+    public void drawImage() //TODO: move drawing methods to a designated DrawControl class
     {
             canvas.setWidth(image.getWidth());
             canvas.setHeight(image.getHeight());
