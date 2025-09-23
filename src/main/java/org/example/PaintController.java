@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -23,6 +24,10 @@ public class PaintController {
     private TextField imageHeight;
     @FXML
     private CheckBox dashBox;
+    @FXML
+    private Spinner<Integer> numPoints;
+    @FXML
+    private TextField textInput;
 
     private Stage stage;
 
@@ -88,6 +93,10 @@ public class PaintController {
             alertWindow.handleExit(fileMenu);
         });
 
+        numPoints.valueProperty().addListener((obs, oldValue, newValue) -> {
+            onPolygon();
+        });
+
         setSizeableTool(new BrushTool()); //brush is selected automatically on startup
     }
 
@@ -146,28 +155,30 @@ public class PaintController {
 
     public void onSquare()
     {
-        setSizeableTool(new RectangleTool(Shape.SQUARE));
+        setSizeableTool(new ShapeTool(Shape.SQUARE));
     } //SQUARE_TOOL
 
     public void onRectangle()
     {
-        setSizeableTool(new RectangleTool(Shape.RECTANGLE));
-    }
+        setSizeableTool(new ShapeTool(Shape.RECTANGLE));
+    } //RECTANGLE_TOOL
 
     public void onCircle()
     {
-        setSizeableTool(new RectangleTool(Shape.CIRCLE));
+        setSizeableTool(new ShapeTool(Shape.CIRCLE));
     } //CIRCLE_TOOL
 
     public void onEllipse()
     {
-        setSizeableTool(new RectangleTool(Shape.ELLIPSE)); //ELLIPSE_TOOL
-    }
+        setSizeableTool(new ShapeTool(Shape.ELLIPSE));
+    } //ELLIPSE_TOOL
 
     public void onTriangle()
     {
-        setSizeableTool(new TriangleTool());
-    }
+        setSizeableTool(new PolygonTool());
+    } //default polygon is a triangle
+
+    public void onPolygon(){setSizeableTool(new PolygonTool(numPoints.getValue()));}
 
     /*-----HELP MENU ACTIONS-----*/
     public void onHelp()
@@ -199,6 +210,11 @@ public class PaintController {
     public void onEraser()
     {
         setSizeableTool(new EraserTool());
+    }
+
+    public void onAddText()
+    {
+        setTool(new TextTool(textInput.getText()));
     }
 
     //RESIZE BUTTON

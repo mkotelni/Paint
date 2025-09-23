@@ -6,6 +6,8 @@
 <!--find out what borderpane is-->
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.paint.Color?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory?>
 <BorderPane fx:id = "borderPane"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -16,7 +18,8 @@
         <VBox>
             <MenuBar>
                 <Menu text = "File" >
-                    <MenuItem text = "Load Image (Ctrl + L)" onAction = "#onLoadImage" accelerator = "Ctrl + L"/>
+                    <MenuItem text = "New Image"/>
+                    <MenuItem text = "Open Image (Ctrl + O)" onAction = "#onLoadImage" accelerator = "Ctrl + O"/>
                     <MenuItem text = "Save       (Ctrl + S)" onAction = "#onSave" accelerator = "Ctrl + S"/>
                     <MenuItem text = "Save as    (Ctrl + Shift + S)" onAction="#onSaveAs" accelerator = "Ctrl + Shift + S"/>
                 </Menu>
@@ -29,12 +32,40 @@
                     <MenuItem text = "Ellipse" onAction = "#onEllipse"/>
                     <MenuItem text = "Triangle" onAction = "#onTriangle"/>
                     <MenuItem text = "Star" onAction = "#onStar"/>
+                    <Menu text = "Polygon">
+                        <CustomMenuItem hideOnClick="false">
+                            <content>
+                                <HBox spacing = "5" alignment="CENTER_LEFT">
+                                    <Label text = "# of Points:" style="-fx-text-fill: black;"/>
+                                    <Spinner fx:id="numPoints" prefWidth= "65" editable="true">
+                                        <valueFactory>
+                                            <SpinnerValueFactory.IntegerSpinnerValueFactory min = "3" max = "100" initialValue="3"/>
+                                        </valueFactory>
+                                    </Spinner>
+                                </HBox>
+                            </content>
+                        </CustomMenuItem>
+                    </Menu>
                 </Menu>
 
                 <Menu text = "Tools">
                     <MenuItem text = "Brush" onAction = "#onBrush"/>
                     <MenuItem text = "Dropper" onAction = "#onDropper"/>
                     <MenuItem text = "Eraser" onAction = "#onEraser"/>
+                    <Menu text = "Add Text">
+                        <CustomMenuItem hideOnClick="false">
+                            <content>
+                                <VBox spacing="5" alignment="CENTER">
+                                    <HBox spacing="5" alignment="CENTER_LEFT">
+                                        <Label text = "Text:" style = "-fx-text-fill: black;"/>
+                                        <TextField fx:id = "textInput" prefWidth="100"/>
+                                    </HBox>
+
+                                    <Button text = "Add Text" onAction="#onAddText"/>
+                                </VBox>
+                            </content>
+                        </CustomMenuItem>
+                    </Menu>
                 </Menu>
 
                 <Menu text = "Help" >
@@ -46,7 +77,7 @@
             <ToolBar>
                 <HBox alignment="CENTER" spacing="5">
                     <Label text = "Brush Size:"/>
-                    <TextField fx:id = "brushSize" text = "1" maxWidth = "40" onAction = "#onBrushSize"/>
+                    <TextField fx:id = "brushSize" text = "1" prefWidth="40" onAction = "#onBrushSize"/>
 
                     <ColorPicker fx:id = "colorPicker">
                         <value>
