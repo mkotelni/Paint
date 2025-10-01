@@ -7,5 +7,5 @@ import javafx.scene.control.ColorPicker;
 
 public interface Tool {
     //will set whatever action will be made on whatever mouse event
-    void install(Canvas canvas, GraphicsContext graphics, ColorPicker colorPicker);
+    void install(Canvas drawingCanvas, GraphicsContext graphics, ColorPicker colorPicker);
 }

@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -11,8 +12,11 @@ import javafx.stage.Stage;
 public class PaintController {
     @FXML
     BorderPane borderPane;
+    @FXML private Canvas imageCanvas;
     @FXML
-    private Canvas canvas;
+    private Canvas drawingCanvas;
+    @FXML
+    private Canvas previewCanvas;
     @FXML
     private ColorPicker colorPicker;
     @FXML
@@ -23,6 +27,12 @@ public class PaintController {
     private TextField imageHeight;
     @FXML
     private CheckBox dashBox;
+    @FXML
+    private Spinner<Integer> numPoints;
+    @FXML
+    private TextField textInput;
+    @FXML
+    private CheckBox irregularCheck;
 
     private Stage stage;
 
@@ -51,8 +61,8 @@ public class PaintController {
     {
         currentTool = tool;
 
-        clearMouseEvents(canvas);
-        tool.install(canvas, screen.getGraphics(), colorPicker); //screen will be the one with the graphics (is that a good idea??? idk)
+        clearMouseEvents(drawingCanvas);
+        tool.install(drawingCanvas, screen.getGraphics(), colorPicker); //screen will be the one with the graphics (is that a good idea??? idk)
     }
 
     /**
@@ -64,8 +74,8 @@ public class PaintController {
     {
         currentSizeableTool = sizeableTool;
 
-        clearMouseEvents(canvas);
-        sizeableTool.install(canvas, screen.getGraphics(), colorPicker);
+        clearMouseEvents(drawingCanvas);
+        sizeableTool.install(drawingCanvas, screen.getGraphics(), colorPicker);
         onBrushSize();
     }
 
@@ -73,19 +83,34 @@ public class PaintController {
     @FXML
     private void initialize()
     {
-        //TODO: fix bug where resizing window clears part of canvas that became hidden from resize
-        // fix bug by either setting canvas to max screen size or by increasing size when window gets bigger but not letting it get smaller
-        canvas.widthProperty().bind(borderPane.widthProperty());
-        canvas.heightProperty().bind(borderPane.heightProperty());
+        //TODO: fix bug where resizing window clears part of drawingCanvas that became hidden from resize
+        // fix bug by either setting drawingCanvas to max screen size or by increasing size when window gets bigger but not letting it get smaller
 
-        screen = new Screen(stage, canvas);
-        fileMenu = new FileMenu(stage, canvas);
+        //bind other canvases to drawing canvas
+        imageCanvas.widthProperty().bind(drawingCanvas.widthProperty());
+        imageCanvas.heightProperty().bind(drawingCanvas.heightProperty());
+
+        previewCanvas.widthProperty().bind(drawingCanvas.widthProperty());
+        previewCanvas.heightProperty().bind(drawingCanvas.heightProperty());
+
+        //make edits on drawingCanvas possible
+        drawingCanvas.toFront();
+
+        //initialize menu objects
+        screen = new Screen(stage, drawingCanvas);
+        fileMenu = new FileMenu(stage, imageCanvas); //CHANGED DRAWINGCANVAS TO IMAGECANVAS
         alertWindow = new AlertWindow();
 
         //smart save
         stage.setOnCloseRequest(windowEvent -> {
             windowEvent.consume();
             alertWindow.handleExit(fileMenu);
+        });
+
+        //update polygon tool whenever value changes
+        numPoints.valueProperty().addListener((obs, oldValue, newValue) -> {
+            onPolygon();
+            isIrregularPolygon();
         });
 
         setSizeableTool(new BrushTool()); //brush is selected automatically on startup
@@ -96,7 +121,7 @@ public class PaintController {
     /**
      * Clears all mouse events used by paint tools
      *
-     * @param canvas The current canvas used for drawing
+     * @param canvas The current drawingCanvas used for drawing
      */
     public static void clearMouseEvents(Canvas canvas)
     {
@@ -120,6 +145,16 @@ public class PaintController {
             screen.getGraphics().setLineDashes(size * 10, size * 5); //length of 10x, gap of 5x
         else
             screen.getGraphics().setLineDashes(0);
+    }
+
+    public void isIrregularPolygon()
+    {
+        if (currentSizeableTool instanceof PolygonTool)
+            if (irregularCheck.isSelected())
+                ((PolygonTool) currentSizeableTool).setIrregular(true);
+            else
+                ((PolygonTool) currentSizeableTool).setIrregular(false);
+
     }
 
     /*-----FILE MENU ACTIONS-----*/
@@ -146,38 +181,40 @@ public class PaintController {
 
     public void onSquare()
     {
-        setSizeableTool(new RectangleTool(Shape.SQUARE));
+        setSizeableTool(new ShapeTool(Shape.SQUARE));
     } //SQUARE_TOOL
 
     public void onRectangle()
     {
-        setSizeableTool(new RectangleTool(Shape.RECTANGLE));
-    }
+        setSizeableTool(new ShapeTool(Shape.RECTANGLE));
+    } //RECTANGLE_TOOL
 
     public void onCircle()
     {
-        setSizeableTool(new RectangleTool(Shape.CIRCLE));
+        setSizeableTool(new ShapeTool(Shape.CIRCLE));
     } //CIRCLE_TOOL
 
     public void onEllipse()
     {
-        setSizeableTool(new RectangleTool(Shape.ELLIPSE)); //ELLIPSE_TOOL
-    }
+        setSizeableTool(new ShapeTool(Shape.ELLIPSE));
+    } //ELLIPSE_TOOL
 
     public void onTriangle()
     {
-        setSizeableTool(new TriangleTool());
+        setSizeableTool(new PolygonTool());
+    } //default polygon is a triangle
+
+    public void onStar()
+    {
+        setSizeableTool(new LineTool(Shape.STAR));
     }
+
+    public void onPolygon(){setSizeableTool(new PolygonTool(numPoints.getValue()));}
 
     /*-----HELP MENU ACTIONS-----*/
     public void onHelp()
     {
         alertWindow.showHelp();
-    }
-
-    public void onStar()
-    {
-        setSizeableTool(new LineTool(Shape.STAR));
     }
 
     public void onAbout()
@@ -201,8 +238,15 @@ public class PaintController {
         setSizeableTool(new EraserTool());
     }
 
+    public void onAddText()
+    {
+        setTool(new TextTool(textInput.getText()));
+    }
+
     //RESIZE BUTTON
-    public void onResize() //TODO: make resize UI look better
+    //TODO: make resize UI look better
+    //TODO: make a resize canvas option
+    public void onResize()
     {
         if (fileMenu.getFile() != null) {
             double width = Double.parseDouble(imageWidth.getText());

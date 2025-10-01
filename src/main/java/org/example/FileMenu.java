@@ -15,6 +15,8 @@ public class FileMenu extends Screen{
     private FileChooser fileChooser;
     private File file;
 
+    private AlertWindow alert;
+
     /*----CONSTRUCTORS----*/
 
     /**
@@ -26,6 +28,7 @@ public class FileMenu extends Screen{
     public FileMenu(Stage stage, Canvas canvas)
     {
         super(stage, canvas);
+        alert = new AlertWindow();
         fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("PNG Files", "*.png"),
@@ -50,14 +53,20 @@ public class FileMenu extends Screen{
      * @param file Image file path
      */
     //writes whatever's on screen to a given file path
-    private void writeImage(File file) //precondition: file != null
+    private void writeImage(File file, String previousFileName) //precondition: file != null
     {
         Image snapshot = getCanvas().snapshot(null, null);
         BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
         String format = chooseFormat(file);
 
         if (format.equals("jpg") || format.equals("bmp")) // jpg/bmp has no alpha support, won't save
+        {
+            if (previousFileName.endsWith(".png"))
+                if (!alert.handleConversionWarning()) //if clicked cancel
+                    return;
+
             image = stripAlpha(snapshot);
+        }
 
         try
         {
@@ -99,7 +108,7 @@ public class FileMenu extends Screen{
                                                         BufferedImage.TYPE_INT_RGB);
 
         Graphics2D g = strippedImage.createGraphics();
-        g.drawImage(strippedImage, 0, 0, Color.WHITE, null);
+        g.drawImage(snapshot, 0, 0, Color.WHITE, null);
         g.dispose();
 
         return strippedImage;
@@ -110,18 +119,22 @@ public class FileMenu extends Screen{
     //save whatever's on screen to current file path
     public void save() {
         if (file != null)
-            writeImage(file);
+            writeImage(file, file.getName().toLowerCase());
         else
             System.out.println("File was not chosen (file is null)");
     }
 
     //save whatever's on screen as a new file
     public void saveAs() {
+        String previousFileFormat = "";
+        if (file != null) //if there is a previous file format
+            previousFileFormat = file.getName().toLowerCase(); //have to grab name before reassigning file later on
+
         fileChooser.setTitle("Save as");
         file = fileChooser.showSaveDialog(getStage());
 
         if (file != null)
-            writeImage(file);
+            writeImage(file, previousFileFormat);
     }
 
     //select and display an image file
