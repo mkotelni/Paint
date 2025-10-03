@@ -1,7 +1,5 @@
 package org.example;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 
 public class BrushTool extends SizeableTool{
@@ -18,18 +16,18 @@ public class BrushTool extends SizeableTool{
      */
     public BrushTool(double size) {setSize(size);}
 
-    public void install(Canvas canvas, GraphicsContext graphics, ColorPicker colorPicker)
+    public void install(Screen screen, ColorPicker colorPicker)
     {
-        canvas.setOnMousePressed(event -> {
-            graphics.beginPath();
-            graphics.moveTo(event.getX(), event.getY());
+        screen.getDrawingCanvas().setOnMousePressed(event -> {
+            screen.getDrawingGraphics().beginPath();
+            screen.getDrawingGraphics().moveTo(event.getX(), event.getY());
 
-            super.install(canvas, graphics, colorPicker);
+            super.install(screen, colorPicker);
         });
 
-        canvas.setOnMouseDragged(event -> {
-            graphics.lineTo(event.getX(), event.getY());
-            graphics.stroke();
+        screen.getDrawingCanvas().setOnMouseDragged(event -> {
+            screen.getDrawingGraphics().lineTo(event.getX(), event.getY());
+            screen.getDrawingGraphics().stroke();
         });
     }
 }

@@ -1,6 +1,5 @@
 package org.example;
 
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 
@@ -10,15 +9,14 @@ public class SizeableTool implements Tool{
     /**
      * Sets a tool's color and width
      *
-     * @param canvas Current canvas
-     * @param graphics Graphics used for drawing
+     * @param screen Canvas holder
      * @param colorPicker ColorPicker object
      */
     //install method just sets line width and color
-    public void install(Canvas canvas, GraphicsContext graphics, ColorPicker colorPicker)
+    public void install(Screen screen, ColorPicker colorPicker)
     {
-        graphics.setStroke(colorPicker.getValue());
-        graphics.setLineWidth(getSize());
+        screen.getDrawingGraphics().setStroke(colorPicker.getValue());
+        screen.getDrawingGraphics().setLineWidth(getSize());
     }
 
     //getters/setters
