@@ -1,13 +1,13 @@
 package org.example;
 
 import javafx.geometry.Point2D;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 
 public class LineTool extends SizeableTool{
     private Point2D firstPoint;
     private Point2D secondPoint;
+
+    private double startX, startY;
 
     private Shape shape;
 
@@ -23,10 +23,37 @@ public class LineTool extends SizeableTool{
      */
     public LineTool(Shape shape) {this.shape = shape;}
 
-    public void install(Canvas canvas, GraphicsContext graphics, ColorPicker colorPicker)
+    public void install(Screen screen, ColorPicker colorPicker)
     {
-        canvas.setOnMouseClicked(event -> {
-            super.install(canvas, graphics, colorPicker);
+        if (shape == Shape.STAR) //special star variant of LineTool
+            drawStar(screen, colorPicker);
+        else
+        {
+            screen.getPreviewCanvas().setOnMousePressed(event -> {
+                super.install(screen, colorPicker);
+                startX = event.getX();
+                startY = event.getY();
+            });
+
+            screen.getPreviewCanvas().setOnMouseDragged(event -> {
+                screen.clearCanvas(screen.getPreviewGraphics());
+                screen.getPreviewGraphics().strokeLine(startX, startY, event.getX(), event.getY());
+            });
+
+            screen.getPreviewCanvas().setOnMouseReleased(event -> {
+                screen.getDrawingGraphics().strokeLine(startX, startY, event.getX(), event.getY());
+                screen.clearCanvas(screen.getPreviewGraphics());
+            });
+        }
+
+    }
+
+    //TODO: figure out if star needs its own class
+    //TODO: change star to fan
+    public void drawStar(Screen screen, ColorPicker colorPicker)
+    {
+        screen.getDrawingCanvas().setOnMouseClicked(event -> {
+            super.install(screen, colorPicker);
 
             if (firstPoint == null) //if it's the first click
                 firstPoint = new Point2D(event.getX(), event.getY());
@@ -34,7 +61,7 @@ public class LineTool extends SizeableTool{
             else
             {
                 secondPoint = new Point2D(event.getX(), event.getY());
-                graphics.strokeLine(firstPoint.getX(), firstPoint.getY(), secondPoint.getX(), secondPoint.getY());
+                screen.getDrawingGraphics().strokeLine(firstPoint.getX(), firstPoint.getY(), secondPoint.getX(), secondPoint.getY());
 
                 //reset to first click again, unless we're using the star shape
                 if (shape != Shape.STAR)

@@ -1,7 +1,5 @@
 package org.example;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.paint.Color;
 
@@ -20,21 +18,39 @@ public class EraserTool extends SizeableTool{
      */
     public EraserTool(double size) {setSize(size);}
 
-    public void install(Canvas canvas, GraphicsContext graphics, ColorPicker colorPicker)
+    public void install(Screen screen, ColorPicker colorPicker)
     {
-        canvas.setOnMousePressed(event -> {
+        screen.getDrawingCanvas().toFront(); //eraser has no live preview mode
+
+        screen.getDrawingCanvas().setOnMousePressed(event -> {
             lastX = event.getX();
             lastY = event.getY();
 
-            graphics.setStroke(Color.valueOf("f4f4f4"));
-            graphics.setLineWidth(getSize());
+            screen.getDrawingGraphics().setLineWidth(getSize()); //needs to only update width, has no color
         });
 
-        canvas.setOnMouseDragged(event -> {
+        screen.getDrawingCanvas().setOnMouseDragged(event -> {
             double x = event.getX();
             double y = event.getY();
 
-            graphics.strokeLine(lastX, lastY, x, y);
+            // FOLLOWING CODE WAS WRITTEN BY CHATGPT (thank you!!!) - Clear along a line between last point and current
+            double dx = x - lastX;
+            double dy = y - lastY;
+            double distance = Math.hypot(dx, dy);
+
+            //iterate along each pixel between current point and last point
+            double steps = distance / (getSize() / 2.0);
+            for (int i = 0; i <= steps; i++) {
+                double px = lastX + dx * (i / steps);
+                double py = lastY + dy * (i / steps);
+
+                screen.getDrawingGraphics().clearRect( //erase as a square centered on the cursor
+                        px - getSize() / 2,
+                        py - getSize() / 2,
+                        getSize(),
+                        getSize()
+                );
+            }
 
             lastX = x;
             lastY = y;
