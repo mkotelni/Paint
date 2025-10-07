@@ -5,5 +5,5 @@ public enum Shape {
     SQUARE,
     ELLIPSE,
     CIRCLE,
-    STAR,
+    FAN,
 }
