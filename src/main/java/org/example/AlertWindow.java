@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
+//TODO: think about making all the functions static, cuz there's no need for a constructor
 public class AlertWindow{
 
     public void showAbout()
@@ -38,7 +39,7 @@ public class AlertWindow{
      */
     public void handleExit(FileMenu fileMenu)
     {
-        Alert exitHandler = new Alert(Alert.AlertType.ERROR);
+        Alert exitHandler = new Alert(Alert.AlertType.WARNING);
         exitHandler.setTitle("Unsaved changes");
         exitHandler.setHeaderText("Are you sure you want to exit without saving?");
         exitHandler.setContentText("Unsaved changes will be lost");
@@ -55,5 +56,49 @@ public class AlertWindow{
             else if (response == noSave)
                 Platform.exit();
         });
+    }
+
+    public boolean handleConversionWarning()
+    {
+        boolean[] proceed = {false};
+
+        Alert conversionHandler = new Alert(Alert.AlertType.WARNING);
+        conversionHandler.setTitle("Lossy image conversion");
+        conversionHandler.setHeaderText("Are you sure you want to convert?");
+        conversionHandler.setContentText("Saving to this format may result in data loss");
+
+        ButtonType confirm = new ButtonType("Confirm");
+        ButtonType cancel = new ButtonType("Cancel");
+
+        conversionHandler.getButtonTypes().setAll(confirm, cancel);
+
+        conversionHandler.showAndWait().ifPresent(response -> {
+            if (response == confirm)
+                proceed[0] = true;
+        });
+
+        return proceed[0];
+    }
+
+    public boolean handleNewCanvasWarning()
+    {
+        boolean[] proceed = {false};
+
+        Alert newCanvasHandler = new Alert(Alert.AlertType.WARNING);
+        newCanvasHandler.setTitle("New Canvas");
+        newCanvasHandler.setHeaderText("Are you sure you want to make a new canvas?");
+        newCanvasHandler.setContentText("Everything on-screen will be erased");
+
+        ButtonType yes = new ButtonType("Yes");
+        ButtonType no = new ButtonType("No");
+
+        newCanvasHandler.getButtonTypes().setAll(yes, no);
+
+        newCanvasHandler.showAndWait().ifPresent(response -> {
+            if (response == yes)
+                proceed[0] = true;
+        });
+
+        return proceed[0];
     }
 }

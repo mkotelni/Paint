@@ -1,9 +1,9 @@
 package org.example;
 
-public enum Shape {
+public enum Shape { //REDUNDANT???
     RECTANGLE,
     SQUARE,
     ELLIPSE,
     CIRCLE,
-    STAR,
+    FAN,
 }

@@ -19,7 +19,7 @@ public class Main extends Application{
     }
 
     //Why did the Java programmer quit his job?
-    //Because he did not get arrays.
+    //Because he did not get arrays (Ha, Ha)
     public static void main(String[] args)
     {
         launch(args);
