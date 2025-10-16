@@ -4,8 +4,10 @@
 <?import javafx.scene.layout.*?>
 
 <!--find out what borderpane is-->
-<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.paint.Color?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory?>
+<?import javafx.scene.canvas.Canvas?>
 <BorderPane fx:id = "borderPane"
             xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -16,9 +18,15 @@
         <VBox>
             <MenuBar>
                 <Menu text = "File" >
-                    <MenuItem text = "Load Image (Ctrl + L)" onAction = "#onLoadImage" accelerator = "Ctrl + L"/>
-                    <MenuItem text = "Save       (Ctrl + S)" onAction = "#onSave" accelerator = "Ctrl + S"/>
-                    <MenuItem text = "Save as    (Ctrl + Shift + S)" onAction="#onSaveAs" accelerator = "Ctrl + Shift + S"/>
+                    <MenuItem text = "New Image" onAction = "#onNewImage" accelerator = "Ctrl + N"/>
+                    <MenuItem text = "Open Image" onAction = "#onLoadImage" accelerator = "Ctrl + O"/>
+                    <MenuItem text = "Save" onAction = "#onSave" accelerator = "Ctrl + S"/>
+                    <MenuItem text = "Save as" onAction="#onSaveAs" accelerator = "Ctrl + Shift + S"/>
+                </Menu>
+
+                <Menu text = "Edit">
+                    <MenuItem text = "Undo" accelerator = "Ctrl + Z"/>
+                    <MenuItem text = "Redo" accelerator = "Ctrl + Y"/>
                 </Menu>
 
                 <Menu text = "Draw">
@@ -28,13 +36,61 @@
                     <MenuItem text = "Circle" onAction = "#onCircle"/>
                     <MenuItem text = "Ellipse" onAction = "#onEllipse"/>
                     <MenuItem text = "Triangle" onAction = "#onTriangle"/>
-                    <MenuItem text = "Star" onAction = "#onStar"/>
+                    <MenuItem text = "Fan" onAction = "#onFan"/>
+                    <Menu text = "Star" onAction = "#onStar">
+                        <CustomMenuItem hideOnClick="false">
+                            <content>
+                                <VBox spacing="5" alignment="CENTER_LEFT">
+                                    <HBox spacing = "5" alignment="CENTER_LEFT">
+                                        <Label text = "# of Points:" style="-fx-text-fill: black;"/>
+                                        <Spinner fx:id="numPointsStar" prefWidth= "65" editable="true">
+                                            <valueFactory>
+                                                <SpinnerValueFactory.IntegerSpinnerValueFactory min = "4" max = "100" initialValue="4"/>
+                                            </valueFactory>
+                                        </Spinner>
+                                    </HBox>
+                                </VBox>
+                            </content>
+                        </CustomMenuItem>
+                    </Menu>
+                    <Menu text = "Polygon" onAction = "#onPolygon">
+                        <CustomMenuItem hideOnClick="false">
+                            <content>
+                                <VBox spacing="5" alignment="CENTER_LEFT">
+                                    <HBox spacing = "5" alignment="CENTER_LEFT">
+                                        <Label text = "# of Points:" style="-fx-text-fill: black;"/>
+                                        <Spinner fx:id="numPointsPolygon" prefWidth= "65" editable="true">
+                                            <valueFactory>
+                                                <SpinnerValueFactory.IntegerSpinnerValueFactory min = "3" max = "100" initialValue="3" />
+                                            </valueFactory>
+                                        </Spinner>
+                                    </HBox>
+
+                                    <CheckBox fx:id = "irregularCheck" text = "Irregular" onAction="#onPolygon" style="-fx-text-fill: black;"/>
+                                </VBox>
+                            </content>
+                        </CustomMenuItem>
+                    </Menu>
                 </Menu>
 
                 <Menu text = "Tools">
                     <MenuItem text = "Brush" onAction = "#onBrush"/>
                     <MenuItem text = "Dropper" onAction = "#onDropper"/>
                     <MenuItem text = "Eraser" onAction = "#onEraser"/>
+                    <Menu text = "Add Text">
+                        <CustomMenuItem hideOnClick="false">
+                            <content>
+                                <VBox spacing="5" alignment="CENTER">
+                                    <HBox spacing="5" alignment="CENTER_LEFT">
+                                        <Label text = "Text:" style = "-fx-text-fill: black;"/>
+                                        <TextField fx:id = "textInput" prefWidth="100"/>
+                                    </HBox>
+
+                                    <Button text = "Add Text" onAction="#onAddText"/>
+                                </VBox>
+                            </content>
+                        </CustomMenuItem>
+                    </Menu>
                 </Menu>
 
                 <Menu text = "Help" >
@@ -46,7 +102,7 @@
             <ToolBar>
                 <HBox alignment="CENTER" spacing="5">
                     <Label text = "Brush Size:"/>
-                    <TextField fx:id = "brushSize" text = "1" maxWidth = "40" onAction = "#onBrushSize"/>
+                    <TextField fx:id = "brushSize" text = "1" prefWidth="40" onAction = "#onBrushSize"/>
 
                     <ColorPicker fx:id = "colorPicker">
                         <value>
@@ -68,7 +124,11 @@
 
     <center>
         <ScrollPane fitToWidth = "true" fitToHeight = "true">
-            <Canvas fx:id = "canvas" width = "600" height = "600" />
+            <StackPane fx:id = "canvasStack">
+                <Canvas fx:id = "imageCanvas" width = "600" height = "600" />
+                <Canvas fx:id = "drawingCanvas" width = "600" height = "600" />
+                <Canvas fx:id = "previewCanvas" width = "600" height = "600" />
+            </StackPane>
         </ScrollPane>
     </center>
 </BorderPane>

@@ -1,7 +1,5 @@
 package org.example;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
@@ -17,10 +15,10 @@ public class DropperTool implements Tool{
      */
     public DropperTool(SizeableTool sizeableTool) {this.sizeableTool = sizeableTool;}
 
-    public void install(Canvas canvas, GraphicsContext graphics, ColorPicker colorPicker)
+    public void install(CanvasControl screen, ColorPicker colorPicker)
     {
-        canvas.setOnMouseClicked(event -> {
-            Image snapshot = canvas.snapshot(null, null);
+        screen.getDrawingCanvas().setOnMouseClicked(event -> {
+            Image snapshot = screen.getDrawingCanvas().snapshot(null, null);
             PixelReader pixelReader = snapshot.getPixelReader();
 
             int x = (int) event.getX();
@@ -30,12 +28,12 @@ public class DropperTool implements Tool{
             {
                 Color color = pixelReader.getColor(x, y);
                 colorPicker.setValue(color);
-                graphics.setStroke(color);
+                screen.getDrawingGraphics().setStroke(color);
             }
 
             //automatically revert to whatever tool was used before selecting dropper
-            canvas.setOnMouseClicked(null);
-            sizeableTool.install(canvas, graphics, colorPicker); //TODO: decide whether or not to implement a buffer to solve eraser fallback
+            screen.getDrawingCanvas().setOnMouseClicked(null);
+            sizeableTool.install(screen, colorPicker); //TODO: decide whether or not to implement a buffer to solve eraser fallback
         });
     }
 }
