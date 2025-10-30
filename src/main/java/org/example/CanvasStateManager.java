@@ -22,14 +22,33 @@ public class CanvasStateManager{
 
     public void undo()
     {
-        if (!undo.empty()) {
-            redo.push(undo.peek());
+        if (undo.size() > 1) //will always need blank state at the bottom
+        {
+            redo.push(undo.pop());
+
             screen.clearAll();
-            screen.drawImage(undo.pop());
+            screen.drawImage(undo.peek());
         }
+
+        System.out.println("undo:" + undo.size()); //TEST
     }
 
+    public void redo()
+    {
+        if (!redo.isEmpty())
+        {
+            undo.push(redo.peek());
 
+            screen.clearAll();
+            screen.drawImage(redo.pop());
+        }
 
+        System.out.println("redo:" + redo.size()); //TEST
+    }
 
+    public void addState()
+    {
+        undo.push(screen.getSnapshot());
+        redo.clear(); //reset redo stack to remove ambiguity if we return to that state via undo again
+    }
 }

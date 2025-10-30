@@ -29,6 +29,8 @@ public class TextTool extends SizeableTool{
         screen.getPreviewCanvas().setOnMouseReleased(event -> {
             screen.clearCanvas(screen.getPreviewGraphics());
             screen.getDrawingGraphics().fillText(text, event.getX(), event.getY());
+
+            actionPerformed(screen);
         });
     }
 }

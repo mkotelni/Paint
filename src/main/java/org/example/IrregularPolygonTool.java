@@ -36,6 +36,8 @@ public class IrregularPolygonTool extends SizeableTool{
                 points[count] = new Point2D(event.getX(), event.getY());
                 isDrawing = true;
                 count++;
+
+                actionPerformed(screen);
             }
 
             if (event.getButton() == MouseButton.SECONDARY) //cancel polygon on right click

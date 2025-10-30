@@ -20,6 +20,13 @@ public class SizeableTool implements Tool{
 
         screen.getPreviewGraphics().setStroke(colorPicker.getValue());
         screen.getPreviewGraphics().setLineWidth(getSize());
+
+        //actionPerformed(screen); //TODO: maybe make 2 installs to account for mouseMoved installations
+    }
+
+    public void actionPerformed(CanvasControl screen){
+        screen.onActionPerformed();
+        System.out.println("ACTION PERFORMED");//TEST
     }
 
     //getters/setters

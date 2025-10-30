@@ -22,6 +22,8 @@ public class FanTool extends SizeableTool{
             else {                                                      //consecutive clicks while drawing
                 screen.clearCanvas(screen.getPreviewGraphics());
                 screen.getDrawingGraphics().strokeLine(firstPoint.getX(), firstPoint.getY(), event.getX(), event.getY());
+
+                actionPerformed(screen);
             }
         });
 

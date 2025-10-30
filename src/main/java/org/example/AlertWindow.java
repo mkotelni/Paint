@@ -4,9 +4,12 @@ import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
-//TODO: think about making all the functions static, cuz there's no need for a constructor
+//TODO: think about making all the functions static, since there's no need for a constructor
 public class AlertWindow{
 
+    /**
+     * Display popup with information about the software
+     */
     public void showAbout()
     {
         Alert aboutWindow = new Alert(Alert.AlertType.INFORMATION);
@@ -18,6 +21,9 @@ public class AlertWindow{
         aboutWindow.showAndWait();
     }
 
+    /**
+     * Display popup with information on how to use the software
+     */
     public void showHelp()
     {
         Alert helpWindow = new Alert(Alert.AlertType.INFORMATION);
@@ -34,6 +40,7 @@ public class AlertWindow{
     }
 
     /**
+     * Smart-save popup that asks for confirmation to exit without saving
      *
      * @param fileMenu A FileMenu object
      */
@@ -58,6 +65,11 @@ public class AlertWindow{
         });
     }
 
+    /**
+     * Warning popup asking for confirmation to perform a potentially lossy conversion when saving
+     *
+     * @return boolean representing user confirmation
+     */
     public boolean handleConversionWarning()
     {
         boolean[] proceed = {false};
@@ -80,6 +92,11 @@ public class AlertWindow{
         return proceed[0];
     }
 
+    /**
+     * Warning popup asking for confirmation to create a blank canvas
+     *
+     * @return boolean representing user confirmation
+     */
     public boolean handleNewCanvasWarning()
     {
         boolean[] proceed = {false};

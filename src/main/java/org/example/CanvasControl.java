@@ -30,8 +30,8 @@ public class CanvasControl {
     public CanvasControl(Stage stage, StackPane canvasStack, Canvas imageCanvas, Canvas drawingCanvas, Canvas previewCanvas)
     {
         this.stage = stage;
-        canvasStateManager = new CanvasStateManager(this);
         this.canvasStack = canvasStack;
+        canvasStateManager = new CanvasStateManager(this);
 
         this.imageCanvas = imageCanvas;
         imageGraphics = this.imageCanvas.getGraphicsContext2D();
@@ -59,6 +59,7 @@ public class CanvasControl {
     public Canvas getPreviewCanvas() {return previewCanvas;}
     public GraphicsContext getDrawingGraphics() {return drawingGraphics;}
     public GraphicsContext getPreviewGraphics() {return previewGraphics;}
+    public CanvasStateManager getCanvasStateManager(){return canvasStateManager;}
     public Stage getStage() {return stage;}
 
     /*----SETTERS----*/
@@ -112,5 +113,10 @@ public class CanvasControl {
         imageGraphics.setFill(Color.WHITE);
         imageGraphics.fillRect(0, 0, imageCanvas.getWidth(), imageCanvas.getHeight());
         imageGraphics.setFill(null);
+    }
+
+    public void onActionPerformed()
+    {
+        canvasStateManager.addState();
     }
 }

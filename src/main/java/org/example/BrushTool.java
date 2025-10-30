@@ -16,20 +16,40 @@ public class BrushTool extends SizeableTool{
      */
     public BrushTool(double size) {setSize(size);}
 
+    /**
+     * Configures the brush tool
+     *
+     * @param screen Canvas holder
+     * @param colorPicker ColorPicker object
+     */
     public void install(CanvasControl screen, ColorPicker colorPicker)
     {
         screen.getDrawingCanvas().toFront(); //brush has no live preview mode
 
         screen.getDrawingCanvas().setOnMousePressed(event -> {
+            super.install(screen, colorPicker);
+
             screen.getDrawingGraphics().beginPath();
             screen.getDrawingGraphics().moveTo(event.getX(), event.getY());
-
-            super.install(screen, colorPicker);
         });
 
         screen.getDrawingCanvas().setOnMouseDragged(event -> {
             screen.getDrawingGraphics().lineTo(event.getX(), event.getY());
             screen.getDrawingGraphics().stroke();
         });
+
+        screen.getDrawingCanvas().setOnMouseReleased(event -> {
+            actionPerformed(screen);
+        });
+    }
+
+    /**
+     * Signals an event to corresponding event processors
+     *
+     * @param screen Canvas holder
+     */
+    public void actionPerformed(CanvasControl screen)
+    {
+        screen.onActionPerformed();
     }
 }

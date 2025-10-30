@@ -38,6 +38,8 @@ public abstract class ShapeTool extends SizeableTool{
             drawShape(screen.getDrawingGraphics());
 
             firstPoint = null;
+
+            actionPerformed(screen);
         });
     }
 
@@ -66,4 +68,9 @@ public abstract class ShapeTool extends SizeableTool{
     {
         return firstPoint != null; //we are drawing if a click is made
     }
+   /* public void actionPerformed(CanvasControl screen) //REDUNDANT?
+    {
+        super.actionPerformed(screen);
+        screen.onActionPerformed();
+    }*/
 }

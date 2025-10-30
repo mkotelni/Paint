@@ -34,6 +34,13 @@ public class DropperTool implements Tool{
             //automatically revert to whatever tool was used before selecting dropper
             screen.getDrawingCanvas().setOnMouseClicked(null);
             sizeableTool.install(screen, colorPicker); //TODO: decide whether or not to implement a buffer to solve eraser fallback
+
+            actionPerformed(screen);
         });
+    }
+
+    public void actionPerformed(CanvasControl screen)
+    {
+        //TBD
     }
 }

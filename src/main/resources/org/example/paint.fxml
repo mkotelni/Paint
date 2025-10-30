@@ -25,8 +25,8 @@
                 </Menu>
 
                 <Menu text = "Edit">
-                    <MenuItem text = "Undo" accelerator = "Ctrl + Z"/>
-                    <MenuItem text = "Redo" accelerator = "Ctrl + Y"/>
+                    <MenuItem text = "Undo" onAction = "#onUndo" accelerator = "Ctrl + Z"/>
+                    <MenuItem text = "Redo" onAction = "#onRedo" accelerator = "Ctrl + Y"/>
                 </Menu>
 
                 <Menu text = "Draw">

@@ -104,6 +104,8 @@ public class PaintController {
         fileMenu = new FileMenu(screen);
         alertWindow = new AlertWindow();
 
+        screen.getCanvasStateManager().addState(); //make the blank screen the 1st state REDUNDANT???
+
         //bind other canvas' dimensions to drawing canvas
         imageCanvas.widthProperty().bind(drawingCanvas.widthProperty());
         imageCanvas.heightProperty().bind(drawingCanvas.heightProperty());
@@ -195,6 +197,10 @@ public class PaintController {
     {
         fileMenu.loadImage();
     }
+
+    /*-----EDIT MENU ACTIONS-----*/
+    public void onUndo(){screen.getCanvasStateManager().undo();}
+    public void onRedo(){screen.getCanvasStateManager().redo();}
 
     /*-----DRAW MENU ACTIONS-----*/
     public void onStraightLine()

@@ -50,9 +50,19 @@ public class EraserTool extends SizeableTool{
                         getSize()
                 );
             }
+            //END OF GPT CODE
 
             lastX = x;
             lastY = y;
         });
+
+        screen.getDrawingCanvas().setOnMouseReleased(event -> {
+            actionPerformed(screen);
+        });
+    }
+
+    public void actionPerformed(CanvasControl screen)
+    {
+        screen.onActionPerformed();
     }
 }
