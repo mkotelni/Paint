@@ -1,0 +1,122 @@
+Max Kotelnikov's Paint v1.2.7 - 10/30/25
+
+New Features:
+* Renamed Star tool into Fan
+* Revamped Text tool
+* Added Live preview capabilities to all tools/shapes
+* Added Irregular Polygon tool
+* Added Polygon tool
+* Added Star tool
+* Added Triangle tool - hold ctrl for equilateral triangles, shift for right triangles
+* Added warning popup when performing lossy conversion
+* Added a "New Canvas" option
+* Added undo/redo capability
+
+Known Issues:
+* UI needs to be reworked to be more clean
+* UI for Text tool needs to be reworked to be more clean
+* Right triangles drawn with Triangle tool have limited orientation options
+* Equilateral triangles drawn with Triangle tool are slightly isosceles
+* Undo/redo is not implemented for every tool
+* Undo/redo implemented for "many clicks" tools like Fan and Irregular Polygon looks funky
+
+Expected Features:
+* View menu
+* Ability to resize the canvas without stretching loaded image
+* Autosave
+* Tabs
+* Select
+* Copy/Paste
+* "Glitch" tool
+* More to come
+
+Links:
+* GitHub: https://github.com/mkotelni/Paint.git
+* Demo video: https://youtu.be/BPoUg3gfOiw
+=================================================
+
+Max Kotelnikov's Paint v1.1.0 - 09/12/25
+
+New Features:
+* Functional JPG/BMP support
+* Help/About menu content
+* Javadoc commenting
+* Ability to draw a straight line, square, rectangle, circle, ellipse, triangle, and "star"
+* Keyboard shortcuts
+* Dropper tool
+* Eraser tool
+* Functional color picker
+* Dashed mode for lines
+* Java pun - Why did the Java programmer quit his job? Because he did not get arrays.
+
+Known Issues:
+* Resizing a window to a smaller size will clear anything drawn outside the borders of the new smaller window
+* Class used for drawing the majority of the shapes needs a name change to better reflect its capabilities
+* When drawing squares/circles, the shape is drawn from the top-left-most point, not where the first click was
+* UI could use a glow up
+
+Expected Features:
+* Undo/Redo
+* "New Canvas" option
+* More shapes
+* Select
+* Copy/paste
+* "Live preview" of shapes being drawn
+* Text writing on image
+* Tabs
+
+Links:
+* GitHub: https://github.com/mkotelni/Paint.git
+
+=================================================
+
+Max Kotelnikov's Paint v1.0.0 - 09/05/25
+
+New Features:
+* JPG and BMP file support (kinda)
+* Drawing
+* Managing an image larger than the window
+* Brush size control
+* Color chooser, but doesn't affect the line yet
+* Help menu
+	* Help option
+	* About option
+* Smart save
+* Image resizing
+
+Known Issues:
+* JPG/BMP support isn't really there since I have to strip alpha or else the writer fails
+* Help/About options don't have anything in them
+
+Expected features:
+* Shape drawing
+* Keyboard shortcuts
+* Dropper
+
+Links:
+* GitHub: https://github.com/mkotelni/Paint.git
+
+=================================================
+
+Max Kotelnikov's Paint v0.0.1 - 08/29/25
+
+New Features:
+* Application window
+* Menu bar
+* File menu
+	* Load image feature
+	* Save/Save as feature
+	* Exit feature
+
+Known Issues:
+* Project is not very modular
+
+Expected features:
+* Drawing
+* Color picker
+* Modulization
+* Comments
+* Expanded file support
+
+Links:
+* GitHub: https://github.com/mkotelni/Paint.git

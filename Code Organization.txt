@@ -1,0 +1,25 @@
+* The PaintController class handles events performed on the UI elements
+
+---------
+
+* CanvasControl houses all of the canvas layers, as well as making broad changes to them. 
+
+* CanvasControl also controls the states of the screen (undo/redo) through CanvasStateManager, although that feature is yet to be fully implemented
+
+---------
+
+* The Tool hierarchy encompasses all the tools used to make changes onto the canvas. 
+
+* Tools without a size (like dropper) implement the Tool interface directly, while those with a modifiable size inherit the SizeableTool class, which also implements the Tool interface. 
+
+* ShapeTool is the parent class of all tools that are drawn in relation to a box created by the user clicking and dragging the mouse (see ClickBox class). ShapeTool also inherits SizeableTool.
+
+---------
+
+* FileMenu handles features listed under the File dropdown
+
+* AlertWindow handles features listed under the Help dropdown
+
+---------
+
+* It looks like I have two main classes, but that's so that I can generate a runnable fatJar because of some shenanigans with JavaFX, MainFX is the "main class"
