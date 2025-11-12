@@ -2,6 +2,11 @@ package org.example;
 
 import javafx.geometry.Point2D;
 
+/**
+ * The ClickBox class contains the information of the box created when a user clicks and drags the cursor.
+ * The information contained consists of the location of the origin, the location of the center, the width, and the height.
+ * This information is typically used in tandem with the various drawing tools available.
+ */
 public class ClickBox {
     private Point2D firstPoint;
     private Point2D secondPoint;
@@ -19,16 +24,52 @@ public class ClickBox {
     private boolean isSquare = false;
 
     public ClickBox() {}
+
+    /**
+     * Creates a ClickBox
+     *
+     * @param firstPoint the location of where the user clicked the mouse
+     * @param secondPoint the location of where the user dragged the mouse
+     */
     public ClickBox(Point2D firstPoint, Point2D secondPoint)
     {
         update(firstPoint, secondPoint);
     }
 
+    /**
+     * Returns the origin of the box
+     *
+     * @return the origin
+     */
     public Point2D getOrigin() {return origin;}
+
+    /**
+     * Returns the center of the box
+     *
+     * @return the center
+     */
     public Point2D getCenter() {return center;}
+
+    /**
+     * Returns the width of the box
+     *
+     * @return the width
+     */
     public double getWidth() {return width;}
+
+    /**
+     * Returns the height of the box
+     *
+     * @return the height
+     */
     public double getHeight() {return height;}
 
+    /**
+     * Updates the information of the clickbox
+     *
+     * @param firstPoint the location of where the user clicked the mouse
+     * @param secondPoint the location of where the user dragged the mouse
+     */
     public void update(Point2D firstPoint, Point2D secondPoint)
     {
         //assume the first click is the origin (top-left-most point)
@@ -56,6 +97,9 @@ public class ClickBox {
             makeSquare();
     }
 
+    /**
+     * Truncates the box to make it square and modifies its information accordingly
+     */
     public void makeSquare()
     {
         isSquare = true;
@@ -79,6 +123,9 @@ public class ClickBox {
         }
     }
 
+    /**
+     * Releases constraints made by making the clickbox square
+     */
     public void makeRectangular()
     {
         isSquare = false;

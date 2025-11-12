@@ -24,11 +24,10 @@
                     <MenuItem text = "Save as" onAction="#onSaveAs" accelerator = "Ctrl + Shift + S"/>
                 </Menu>
 
-                <Menu text = "Edit">
+                <Menu text = "Edit" visible="false"> <!-- MAKE VISIBLE AFTER FULL IMPLEMENTATION -->
                     <MenuItem text = "Undo" onAction = "#onUndo" accelerator = "Ctrl + Z"/>
                     <MenuItem text = "Redo" onAction = "#onRedo" accelerator = "Ctrl + Y"/>
                 </Menu>
-
                 <Menu text = "Draw">
                     <MenuItem text = "Straight Line" onAction = "#onStraightLine"/>
                     <MenuItem text = "Square" onAction = "#onSquare"/>

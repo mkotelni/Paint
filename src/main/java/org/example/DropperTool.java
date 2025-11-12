@@ -5,16 +5,26 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 
+/**
+ * The DropperTool class is a tool used to select the color of a pixel on screen
+ */
 public class DropperTool implements Tool{
     private SizeableTool sizeableTool;
 
     /**
-     * Constructor for DropperTool that keeps track of the tool used before it
+     * Creates a dropper tool
      *
      * @param sizeableTool The tool used before selecting the dropper
      */
+    //TODO: previous tool should probably be a generic tool, not sizeable
     public DropperTool(SizeableTool sizeableTool) {this.sizeableTool = sizeableTool;}
 
+    /**
+     * Configures the dropper tool
+     *
+     * @param screen Canvas holder
+     * @param colorPicker ColorPicker object
+     */
     public void install(CanvasControl screen, ColorPicker colorPicker)
     {
         screen.getDrawingCanvas().setOnMouseClicked(event -> {

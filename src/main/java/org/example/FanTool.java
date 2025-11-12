@@ -4,9 +4,18 @@ import javafx.geometry.Point2D;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.input.MouseButton;
 
+/**
+ * The FanTool class is a sizeable tool used to draw "fan" like shapes
+ */
 public class FanTool extends SizeableTool{
     private Point2D firstPoint;
 
+    /**
+     * Configures the fan tool
+     *
+     * @param screen Canvas holder
+     * @param colorPicker ColorPicker object
+     */
     @Override
     public void install(CanvasControl screen, ColorPicker colorPicker)
     {

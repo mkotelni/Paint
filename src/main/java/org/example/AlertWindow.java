@@ -5,6 +5,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 //TODO: think about making all the functions static, since there's no need for a constructor
+
+/**
+ * The AlertWindow class manages various popups to provide the user with information and ask for confirmation for various actions
+ */
 public class AlertWindow{
 
     /**
@@ -15,9 +19,12 @@ public class AlertWindow{
         Alert aboutWindow = new Alert(Alert.AlertType.INFORMATION);
         aboutWindow.setTitle("About");
         aboutWindow.setHeaderText("About this software:");
-        aboutWindow.setContentText("Pain(t) v1.0.1\n\n" +
-                                    "2025 Max Kotelnikov\n\n" +
-                                    "Github: https://github.com/mkotelni/Paint.git");
+        aboutWindow.setContentText("""
+                Pain(t) v1.2.7
+                
+                2025 Max Kotelnikov
+                
+                Github: https://github.com/mkotelni/Paint.git""");
         aboutWindow.showAndWait();
     }
 
@@ -29,13 +36,15 @@ public class AlertWindow{
         Alert helpWindow = new Alert(Alert.AlertType.INFORMATION);
         helpWindow.setTitle("Help");
         helpWindow.setHeaderText("How to use:");
-        helpWindow.setContentText("File menu:\n" +
-                                    "Load and save images through the file menu\n\n" +
-                                    "Drawing:\n" +
-                                    "To draw, click and drag the mouse\n" +
-                                    "To change brush size, input desired size in the Brush Size text field and press enter\n" +
-                                    "To change color, click the color dropdown and choose a color\n" +
-                                    "To resize an image, input width and height to their respective text fields and click the resize button");
+        helpWindow.setContentText("""
+                File menu:
+                Load and save images through the file menu
+                
+                Drawing:
+                To draw, click and drag the mouse
+                To change brush size, input desired size in the Brush Size text field and press enter
+                To change color, click the color dropdown and choose a color
+                To resize an image, input width and height to their respective text fields and click the resize button""");
         helpWindow.showAndWait();
     }
 

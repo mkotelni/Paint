@@ -2,21 +2,30 @@ package org.example;
 
 import javafx.scene.control.ColorPicker;
 
+/**
+ * The EraserTool class is a sizeable tool used to erase drawings made on the drawing layer
+ */
 public class EraserTool extends SizeableTool{
     double lastX, lastY;
 
     /**
-     * Constructor for EraserTool with a default width of 1 pixel
+     * Creates an eraser tool with a default width of 1 pixel
      */
     public EraserTool() {setSize(1);}
 
     /**
-     * Constructor for EraserTool specifying eraser width
+     * Creates an eraser tool with a specific width
      *
      * @param size Eraser size
      */
     public EraserTool(double size) {setSize(size);}
 
+    /**
+     * Configures the eraser tool
+     *
+     * @param screen Canvas holder
+     * @param colorPicker ColorPicker object
+     */
     public void install(CanvasControl screen, ColorPicker colorPicker)
     {
         screen.getDrawingCanvas().toFront(); //eraser has no live preview mode
@@ -61,6 +70,11 @@ public class EraserTool extends SizeableTool{
         });
     }
 
+    /**
+     * Signals an event to corresponding event processors
+     *
+     * @param screen Canvas holder
+     */
     public void actionPerformed(CanvasControl screen)
     {
         screen.onActionPerformed();

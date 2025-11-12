@@ -7,6 +7,9 @@ import javafx.scene.input.MouseButton;
 
 import java.util.Arrays;
 
+/**
+ * The IrregularPolygonTool class is a sizeable tool used to draw irregular polygons
+ */
 public class IrregularPolygonTool extends SizeableTool{
     private Point2D[] points; //TODO: consider implementing points as a list in order to not have to track count manually
     private int numPoints;
@@ -20,12 +23,23 @@ public class IrregularPolygonTool extends SizeableTool{
         points = new Point2D[numPoints];
     }
 
+    /**
+     * Creates an irregular polygon tool
+     *
+     * @param numPoints the number of points of the irregular polygon
+     */
     public IrregularPolygonTool(int numPoints)
     {
         this.numPoints = numPoints;
         points = new Point2D[numPoints];
     }
 
+    /**
+     * Configures the irregular polygon tool
+     *
+     * @param screen Canvas holder
+     * @param colorPicker ColorPicker object
+     */
     public void install(CanvasControl screen, ColorPicker colorPicker)
     {
         screen.getPreviewCanvas().setOnMouseClicked(event -> {

@@ -2,16 +2,18 @@ package org.example;
 
 import javafx.scene.control.ColorPicker;
 
+/**
+ * The SizeableTool class is a generic tool class that contains basic information for all tools with a size
+ */
 public class SizeableTool implements Tool{
     private double size;
 
     /**
-     * Sets a tool's color and width
+     * Configures a tool's width and color
      *
      * @param screen Canvas holder
      * @param colorPicker ColorPicker object
      */
-    //install method just sets line width and color
     public void install(CanvasControl screen, ColorPicker colorPicker)
     {
         //set up each editable canvas
@@ -24,13 +26,28 @@ public class SizeableTool implements Tool{
         //actionPerformed(screen); //TODO: maybe make 2 installs to account for mouseMoved installations
     }
 
+    /**
+     * Signals an event to corresponding event processors
+     *
+     * @param screen Canvas holder
+     */
     public void actionPerformed(CanvasControl screen){
         screen.onActionPerformed();
-        System.out.println("ACTION PERFORMED");//TEST
     }
 
     //getters/setters
+    /**
+     * Returns the size of the tool
+     *
+     * @return the size
+     */
     public double getSize() {return size;}
+
+    /**
+     * Sets the size of a tool
+     *
+     * @param size the size
+     */
     public void setSize(double size) {this.size = size;}
 
 }

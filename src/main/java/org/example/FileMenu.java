@@ -9,6 +9,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+/**
+ * The FileMenu class handles file related events such as opening saving image files.
+ * Currently supported file types include PNG, JPG, and BMP.
+ */
 public class FileMenu{
     private FileChooser fileChooser;
     private File file;
@@ -17,11 +21,10 @@ public class FileMenu{
     private AlertWindow alert;
 
     /*----CONSTRUCTORS----*/
-
     /**
      * FileMenu constructor that sets image filters to PNG, JPG, and BMP
      *
-     * @param screen The object holding the canvases
+     * @param screen canvas holder
      */
     public FileMenu(CanvasControl screen)
     {
@@ -36,6 +39,12 @@ public class FileMenu{
     }
 
     /*----GETTERS----*/
+
+    /**
+     * Returns the current image file
+     *
+     * @return the image file
+     */
     public File getFile() {return file;}
     public FileChooser getFileChooser() {return fileChooser;}
 
@@ -47,11 +56,10 @@ public class FileMenu{
     /*----HELPER FUNCTIONS----*/
 
     /**
-     * writes what's on the canvas as an image to a given file path
+     * Writes what's on the canvas as an image to a given file path
      *
-     * @param file Image file path
+     * @param file the image file path
      */
-    //writes whatever's on screen to a given file path
     private void writeImage(File file, String previousFileName) //precondition: file != null
     {
         Image snapshot = screen.getSnapshot();
@@ -94,7 +102,7 @@ public class FileMenu{
     /**
      * Strips an image of its alpha channel
      *
-     * @param image The image that needs to be stripped of alpha
+     * @param image The image to be stripped of alpha
      * @return The image without its alpha channel
      */
     //used if we need to convert to a file type that doesn't support alpha (transparency)
@@ -115,7 +123,9 @@ public class FileMenu{
 
     /*-----BUTTON ACTIONS------*/
 
-    //save whatever's on screen to current file path
+    /**
+     * Saves what's onscreen to the current file path
+     */
     public void save() {
         if (file != null)
             writeImage(file, file.getName().toLowerCase());
@@ -123,7 +133,9 @@ public class FileMenu{
             System.out.println("File was not chosen (file is null)");
     }
 
-    //save whatever's on screen as a new file
+    /**
+     * Saves what's onscreen to a new file
+     */
     public void saveAs() {
         String previousFileFormat = "";
         if (file != null) //if there is a previous file format
@@ -132,11 +144,13 @@ public class FileMenu{
         fileChooser.setTitle("Save as");
         file = fileChooser.showSaveDialog(screen.getStage());
 
-        if (file != null)
+        if (file != null) //not the same file, check again
             writeImage(file, previousFileFormat);
     }
 
-    //select and display an image file
+    /**
+     * Allows the user to select and display an image file
+     */
     public void loadImage()
     {
         fileChooser.setTitle("Select Image File");
@@ -145,7 +159,6 @@ public class FileMenu{
         if (file != null)
         {
             Image image = new Image(file.toURI().toString());
-            screen.setImage(image);
             screen.drawImage(image, image.getWidth(), image.getHeight());
         }
     }

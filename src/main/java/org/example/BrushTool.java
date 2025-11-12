@@ -2,6 +2,9 @@ package org.example;
 
 import javafx.scene.control.ColorPicker;
 
+/**
+ * The BrushTool class is a sizeable tool used to perform free-line drawing
+ */
 public class BrushTool extends SizeableTool{
 
     /**

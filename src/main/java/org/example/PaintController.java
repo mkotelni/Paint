@@ -11,6 +11,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+/**
+ * The PaintController class controls actions performed by the UI elements
+ */
 public class PaintController {
     @FXML
     BorderPane borderPane;
@@ -60,7 +63,7 @@ public class PaintController {
     /*-----SETTERS-----*/
 
     /**
-     * This method sets and installs a given Tool
+     * Sets and installs a given Tool
      *
      * @param tool A Tool object for tools that don't have a size
      */
@@ -73,11 +76,11 @@ public class PaintController {
         drawingCanvas.toFront(); //assume the tool doesn't have/need a live preview mode
 
         //set up tool
-        tool.install(screen, colorPicker); //screen will be the one with the graphics (is that a good idea??? idk)
+        tool.install(screen, colorPicker);
     }
 
     /**
-     * This method sets and installs a given SizeableTool
+     * Sets and installs a given SizeableTool
      *
      * @param sizeableTool A Sizeable Tool object for tools that have a size
      */
@@ -141,7 +144,7 @@ public class PaintController {
     /**
      * Clears all mouse events used by paint tools on a given canvas
      *
-     * @param canvas A canvas used for drawing
+     * @param canvas A canvas layer
      */
     public static void clearMouseEvents(Canvas canvas)
     {
@@ -179,6 +182,7 @@ public class PaintController {
     /*-----FILE MENU ACTIONS-----*/
     public void onNewImage()
     {
+        //TODO: don't display popup if blank canvas, just do
         if (alertWindow.handleNewCanvasWarning()) //confirm new canvas action
             screen.clearAll();
     }
@@ -231,7 +235,7 @@ public class PaintController {
     public void onTriangle()
     {
         setSizeableTool(new TriangleTool());
-    } //default polygon is a triangle //TEMP
+    }
 
     public void onFan()
     {
@@ -249,7 +253,6 @@ public class PaintController {
             setSizeableTool(new PolygonTool(numPointsPolygon.getValue()));
         else
             setSizeableTool(new IrregularPolygonTool(numPointsPolygon.getValue()));
-        //isIrregularPolygon();
     }
 
     /*-----HELP MENU ACTIONS-----*/
@@ -289,13 +292,13 @@ public class PaintController {
     //TODO: make a resize canvas option
     public void onResize()
     {
-        if (fileMenu.getFile() != null) {
-            double width = Double.parseDouble(imageWidth.getText());
-            double height = Double.parseDouble(imageHeight.getText());
+        double width = Double.parseDouble(imageWidth.getText());
+        double height = Double.parseDouble(imageHeight.getText());
 
-            //screen.setImage(fileMenu.getImage()); //REDUNDANT?
+        if (fileMenu.getFile() != null)
             screen.drawImage(new Image(fileMenu.getFile().toURI().toString()), width, height); //screen already has loaded image through FileMenu.LoadImage()
-        }
+        else
+            screen.drawImage(screen.getImageCanvas().snapshot(null, null), width, height);
     }
 
     /*-----TEXTFIELD ACTIONS-----*/
