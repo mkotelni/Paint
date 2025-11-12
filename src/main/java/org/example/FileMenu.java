@@ -1,31 +1,36 @@
 package org.example;
 
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
-public class FileMenu extends Screen{
+/**
+ * The FileMenu class handles file related events such as opening saving image files.
+ * Currently supported file types include PNG, JPG, and BMP.
+ */
+public class FileMenu{
     private FileChooser fileChooser;
     private File file;
+    private CanvasControl screen;
+
+    private AlertWindow alert;
 
     /*----CONSTRUCTORS----*/
-
     /**
      * FileMenu constructor that sets image filters to PNG, JPG, and BMP
      *
-     * @param stage The current stage
-     * @param canvas The current canvas
+     * @param screen canvas holder
      */
-    public FileMenu(Stage stage, Canvas canvas)
+    public FileMenu(CanvasControl screen)
     {
-        super(stage, canvas);
+        this.screen = screen;
+        alert = new AlertWindow();
+
         fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("PNG Files", "*.png"),
@@ -34,6 +39,12 @@ public class FileMenu extends Screen{
     }
 
     /*----GETTERS----*/
+
+    /**
+     * Returns the current image file
+     *
+     * @return the image file
+     */
     public File getFile() {return file;}
     public FileChooser getFileChooser() {return fileChooser;}
 
@@ -45,19 +56,24 @@ public class FileMenu extends Screen{
     /*----HELPER FUNCTIONS----*/
 
     /**
-     * writes what's on the canvas as an image to a given file path
+     * Writes what's on the canvas as an image to a given file path
      *
-     * @param file Image file path
+     * @param file the image file path
      */
-    //writes whatever's on screen to a given file path
-    private void writeImage(File file) //precondition: file != null
+    private void writeImage(File file, String previousFileName) //precondition: file != null
     {
-        Image snapshot = getCanvas().snapshot(null, null);
+        Image snapshot = screen.getSnapshot();
         BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
         String format = chooseFormat(file);
 
         if (format.equals("jpg") || format.equals("bmp")) // jpg/bmp has no alpha support, won't save
+        {
+            if (previousFileName.endsWith(".png"))
+                if (!alert.handleConversionWarning()) //if clicked cancel
+                    return;
+
             image = stripAlpha(snapshot);
+        }
 
         try
         {
@@ -86,7 +102,7 @@ public class FileMenu extends Screen{
     /**
      * Strips an image of its alpha channel
      *
-     * @param image The image that needs to be stripped of alpha
+     * @param image The image to be stripped of alpha
      * @return The image without its alpha channel
      */
     //used if we need to convert to a file type that doesn't support alpha (transparency)
@@ -99,7 +115,7 @@ public class FileMenu extends Screen{
                                                         BufferedImage.TYPE_INT_RGB);
 
         Graphics2D g = strippedImage.createGraphics();
-        g.drawImage(strippedImage, 0, 0, Color.WHITE, null);
+        g.drawImage(snapshot, 0, 0, Color.WHITE, null);
         g.dispose();
 
         return strippedImage;
@@ -107,33 +123,43 @@ public class FileMenu extends Screen{
 
     /*-----BUTTON ACTIONS------*/
 
-    //save whatever's on screen to current file path
+    /**
+     * Saves what's onscreen to the current file path
+     */
     public void save() {
         if (file != null)
-            writeImage(file);
+            writeImage(file, file.getName().toLowerCase());
         else
             System.out.println("File was not chosen (file is null)");
     }
 
-    //save whatever's on screen as a new file
+    /**
+     * Saves what's onscreen to a new file
+     */
     public void saveAs() {
-        fileChooser.setTitle("Save as");
-        file = fileChooser.showSaveDialog(getStage());
+        String previousFileFormat = "";
+        if (file != null) //if there is a previous file format
+            previousFileFormat = file.getName().toLowerCase(); //have to grab name before reassigning file later on
 
-        if (file != null)
-            writeImage(file);
+        fileChooser.setTitle("Save as");
+        file = fileChooser.showSaveDialog(screen.getStage());
+
+        if (file != null) //not the same file, check again
+            writeImage(file, previousFileFormat);
     }
 
-    //select and display an image file
+    /**
+     * Allows the user to select and display an image file
+     */
     public void loadImage()
     {
         fileChooser.setTitle("Select Image File");
-        file = fileChooser.showOpenDialog(getStage());
+        file = fileChooser.showOpenDialog(screen.getStage());
 
         if (file != null)
         {
-            setImage(new Image(file.toURI().toString()));
-            drawImage();
+            Image image = new Image(file.toURI().toString());
+            screen.drawImage(image, image.getWidth(), image.getHeight());
         }
     }
 }

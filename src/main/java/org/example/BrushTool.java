@@ -1,9 +1,10 @@
 package org.example;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ColorPicker;
 
+/**
+ * The BrushTool class is a sizeable tool used to perform free-line drawing
+ */
 public class BrushTool extends SizeableTool{
 
     /**
@@ -18,18 +19,40 @@ public class BrushTool extends SizeableTool{
      */
     public BrushTool(double size) {setSize(size);}
 
-    public void install(Canvas canvas, GraphicsContext graphics, ColorPicker colorPicker)
+    /**
+     * Configures the brush tool
+     *
+     * @param screen Canvas holder
+     * @param colorPicker ColorPicker object
+     */
+    public void install(CanvasControl screen, ColorPicker colorPicker)
     {
-        canvas.setOnMousePressed(event -> {
-            graphics.beginPath();
-            graphics.moveTo(event.getX(), event.getY());
+        screen.getDrawingCanvas().toFront(); //brush has no live preview mode
 
-            super.install(canvas, graphics, colorPicker);
+        screen.getDrawingCanvas().setOnMousePressed(event -> {
+            super.install(screen, colorPicker);
+
+            screen.getDrawingGraphics().beginPath();
+            screen.getDrawingGraphics().moveTo(event.getX(), event.getY());
         });
 
-        canvas.setOnMouseDragged(event -> {
-            graphics.lineTo(event.getX(), event.getY());
-            graphics.stroke();
+        screen.getDrawingCanvas().setOnMouseDragged(event -> {
+            screen.getDrawingGraphics().lineTo(event.getX(), event.getY());
+            screen.getDrawingGraphics().stroke();
         });
+
+        screen.getDrawingCanvas().setOnMouseReleased(event -> {
+            actionPerformed(screen);
+        });
+    }
+
+    /**
+     * Signals an event to corresponding event processors
+     *
+     * @param screen Canvas holder
+     */
+    public void actionPerformed(CanvasControl screen)
+    {
+        screen.onActionPerformed();
     }
 }
